@@ -1,13 +1,13 @@
 package com.webapp.model;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 
-import javax.enterprise.inject.Model;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,20 +27,26 @@ public class TodoController {
 
 	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
 	public String addTodo(ModelMap model) {
-		Todo todo = new Todo(0,"ajay","",new Date(),false);
-		model.addAttribute("todo",todo);
+		//Todo todo = new Todo(0,"ajay","",new Date(),false);
+		model.addAttribute("todo",new Todo());
 		return "add-todo";
 	}
 
 	@RequestMapping(value = "/add-todo", method = RequestMethod.POST)
-	public String redirectAfterAdd(ModelMap model, @RequestParam String desc) {
-		service.addTodo("ajay", desc, new Date(), false);
+	public String redirectAfterAdd(ModelMap model, @Valid Todo todo, BindingResult result) {
+		if(result.hasErrors())
+		{
+			return "add-todo";
+		}
+		service.addTodo("ajay", todo.getDesc(), new Date(), false);
+		model.clear();
 		return "redirect:list-todos";
 	}
 
 	@RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
 	public String deleteTodo(ModelMap model, @RequestParam int id) {
 		service.deleteTodo(id);
+		model.clear();
 		return "redirect:list-todos";
 	}
 }

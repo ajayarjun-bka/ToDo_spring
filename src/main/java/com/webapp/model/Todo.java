@@ -7,10 +7,15 @@ import javax.validation.constraints.Size;
 public class Todo {
     private int id;
     private String user;
-    @Size(min = 10, message = "Enter atleast 10 Characters.")
+    @Size(min = 6, message = "Enter atleast 6 Characters.")
     private String desc;
     private Date targetDate;
     private boolean isDone;
+    
+    public Todo()
+    {
+    	
+    }
 
     public Todo(int id, String user, String desc, Date targetDate, boolean isDone) {
         super();
