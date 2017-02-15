@@ -18,22 +18,29 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class TodoController {
 	@Autowired
 	TodoService service;
-	@RequestMapping(value="/list-todos", method=RequestMethod.GET)
-	public String list_todos(ModelMap model)
-	{
-		model.addAttribute("todos",service.retrieveTodos("ajay"));
+
+	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
+	public String list_todos(ModelMap model) {
+		model.addAttribute("todos", service.retrieveTodos("ajay"));
 		return "list-todos";
 	}
-	@RequestMapping(value="/add-todo",method=RequestMethod.GET)
-	public String addTodo(ModelMap model)
-	{
-	return "add-todo";	
+
+	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
+	public String addTodo(ModelMap model) {
+		Todo todo = new Todo(0,"ajay","",new Date(),false);
+		model.addAttribute("todo",todo);
+		return "add-todo";
 	}
-	
-	@RequestMapping(value="/add-todo",method=RequestMethod.POST)
-	public String redirectAfterAdd(ModelMap model,@RequestParam String desc)
-	{
+
+	@RequestMapping(value = "/add-todo", method = RequestMethod.POST)
+	public String redirectAfterAdd(ModelMap model, @RequestParam String desc) {
 		service.addTodo("ajay", desc, new Date(), false);
-		return "redirect:list-todos";	
+		return "redirect:list-todos";
+	}
+
+	@RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
+	public String deleteTodo(ModelMap model, @RequestParam int id) {
+		service.deleteTodo(id);
+		return "redirect:list-todos";
 	}
 }
